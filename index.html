@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    const queryParams = document.location.search.substr(1).split('&').map(s => s.split('='));
+    const query = {};
+    queryParams.forEach(([key, value]) => {
+      query[key] = value;
+    });
+    (function () {
+      var funnelfly = window.funnelfly = window.funnelfly || [];
+      if (funnelfly.initialize) return;
+      if (funnelfly.invoked) {
+        if (window.console && console.error) {
+          console.error('funnelfly snippet included twice.')
+        }
+        return
+      }
+      funnelfly.invoked = !0;
+      funnelfly.methods = ['identify', 'track', 'page'];
+      funnelfly.factory = function (method) {
+        return function () {
+          var args = Array.prototype.slice.call(arguments);
+          args.unshift(method);
+          funnelfly.push(args);
+          return funnelfly
+        }
+      };
+      for (var i = 0; i < funnelfly.methods.length; i++) {
+        var key = funnelfly.methods[i];
+        funnelfly[key] = funnelfly.factory(key)
+      }
+      funnelfly.load = function () {
+        console.log(query);
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = !0;
+        script.src = query.src;
+        var first = document.getElementsByTagName('script')[0];
+        first.parentNode.insertBefore(script, first);
+        funnelfly._loadOptions = { apiUrl: 'http://localhost:3002' };
+        funnelfly._apiKey = query.apiKey;
+      };
+    })();
+    funnelfly.load();
+  </script>
+</head>
+
+<body>
+  <form id="form">
+    <div>
+      <label for="firstName">First Name</label>
+      <input type="text" name="firstName" />
+    </div>
+    <div>
+      <label for="firstName">Last Name</label>
+      <input type="text" name="lastName" />
+    </div>
+    <div>
+      <label for="firstName">Email</label>
+      <input type="email" name="email" />
+    </div>
+    <div>
+      <input type="submit" />
+    </div>
+  </form>
+</body>
+
+</html>
