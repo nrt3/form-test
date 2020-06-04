@@ -42,7 +42,7 @@
         script.src = query.src;
         var first = document.getElementsByTagName('script')[0];
         first.parentNode.insertBefore(script, first);
-        funnelfly._loadOptions = { apiUrl: 'http://localhost:3002' };
+        funnelfly._loadOptions = { apiUrl: query.apiUrl || 'http://localhost:3002' };
         funnelfly._apiKey = query.apiKey;
       };
     })();
